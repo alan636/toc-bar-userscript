@@ -50,6 +50,7 @@
 // @match             *://app.getpocket.com/read/*
 // @match             *://indepth.dev/posts/*
 // @match             *://gitlab.com/*
+// @match             *://kotlinlang.org/*
 // @run-at            document-idle
 // @grant             GM_getResourceText
 // @grant             GM_addStyle
@@ -192,7 +193,7 @@
         siteName: 'github.com',
         contentSelector: matchedSel,
         hasInnerContainers: isIssueDetail ? true: false,
-        scrollSmoothOffset: isIssueDetail ? -ISSUE_DETAIL_HEADING_OFFSET: 0,
+        scrollSmoothOffset: isIssueDetail ? -ISSUE_DETAIL_HEADING_OFFSET: -50,
         headingsOffset: isIssueDetail ? ISSUE_DETAIL_HEADING_OFFSET: 0,
         initialTop: 500,
         onClick,
@@ -273,6 +274,24 @@
     'vuejs.org': {
       contentSelector: 'main > div',
     },
+    'kotlinlang.org': {
+      contentSelector: '.page-content',
+      scrollSmoothOffset: -152,
+      shouldShow() {
+          return true;
+      },
+      findHeaderId(ele) {
+          let id;
+          let anchor = ele.querySelector('.anchor');
+          if (anchor) id = anchor.getAttribute('id');
+
+          if (!anchor) {
+              anchor = ele.querySelector('a');
+              if (anchor) id = anchor.hash.replace(/^#/, '');
+          }
+          return id;
+      },
+  },
   }
 
   function getSiteInfo() {
